@@ -5,6 +5,12 @@ import "../css/search.css";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { searchContext } from "../data/searchContext";
+import { Link } from "react-router-dom";
+import RoomIcon from "@material-ui/icons/Room";
+import VideoLibraryIcon from "@material-ui/icons/VideoLibrary";
+import ImageIcon from "@material-ui/icons/Image";
+import InsertCommentIcon from "@material-ui/icons/InsertComment";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 function Search({ hidden = false }) {
   const { dispatch } = useContext(searchContext);
@@ -13,7 +19,7 @@ function Search({ hidden = false }) {
   const search = (e) => {
     e.preventDefault();
     if (input === "") {
-      alert("bad move");
+      console.warn("Input not Given");
     } else {
       dispatch({
         type: "KEYWORD_ADDED",
@@ -22,12 +28,9 @@ function Search({ hidden = false }) {
       history.push("/search");
     }
   };
-  useEffect(() => {
-    console.log(input);
-  });
   return (
     <form className="search">
-      <div className="search__input">
+      <div className={`search__input ${hidden && " hidden"}`}>
         <SearchIcon />
         <input
           type="text"
@@ -36,21 +39,60 @@ function Search({ hidden = false }) {
         />
         <MicIcon />
       </div>
-      {!hidden ? (
-        <div className="search__btns">
-          <Button onClick={search} type="submit">
-            Google Search
-          </Button>
-          <Button>I'm Feeling Lucky</Button>
-        </div>
-      ) : (
-        <div className="search__btnsHidden">
-          <Button onClick={search} type="submit">
-            Google Search
-          </Button>
-          <Button>I'm Feeling Lucky</Button>
+      {hidden && (
+        <div className="search__options">
+          <div className="search__optionsRight">
+            <div className="search__option active">
+              <SearchIcon />
+              <Link to="/search">All</Link>
+            </div>
+            <div className="search__option">
+              <RoomIcon />
+              <Link to="/maps">Maps</Link>
+            </div>
+            <div className="search__option">
+              <VideoLibraryIcon />
+              <Link to="/videos">Videos</Link>
+            </div>
+            <div className="search__option">
+              <ImageIcon />
+              <Link to="/images">Images</Link>
+            </div>
+            <div className="search__option">
+              <InsertCommentIcon />
+              <Link to="/news">News</Link>
+            </div>
+            <div className="search__option">
+              <MoreVertIcon />
+              <Link to="/more">More</Link>
+            </div>
+          </div>
+          <div className="search__optionsLeft">
+            <div className="search__option">
+              <Link to="/settings">Settings</Link>
+            </div>
+            <div className="search__option">
+              <Link to="/tools">Tools</Link>
+            </div>
+          </div>
         </div>
       )}
+      <div className={!hidden ? "search__btns" : "search__btnsHidden"}>
+        <Button onClick={search} type="submit">
+          Google Search
+        </Button>
+        <Button>
+          <a
+            style={{
+              textDecoration: "none",
+              color: " #6d6969 ",
+            }}
+            href="https://www.google.com/doodles/"
+          >
+            I'm Feeling Lucky
+          </a>
+        </Button>
+      </div>
     </form>
   );
 }
